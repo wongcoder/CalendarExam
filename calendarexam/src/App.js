@@ -7,6 +7,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 class App extends Component {
 
@@ -17,30 +24,21 @@ class App extends Component {
     return splitStringArray
   }
 
-  DaysInMonth(props) {
-   var daysInMonth = new Date({props.year}, {props.month}, 1).getDate()
-   return (
-     <h1>The days in the month are: {daysInMonth}</h1>
-   )
+  daysInMonth(year, month) {
+    var daysInMonth = new Date({props.year}, {props.month}, 1).getDate()
   }
-  transformDate(props) {
-    return (
 
+  generateGrid() {
+    return(
+      <Grid table
     )
   }
+
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React {this.getTodaysDate()}</h1>
-          <DaysInMonth
-            year={this.getTodaysDate()[0]}
-            month={this.getTodaysDate()[1]}
-          />
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Grid container className={}
       </div>
     );
   }

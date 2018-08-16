@@ -16,6 +16,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 class App extends Component {
+  state = {
+    currentMonth: new Date(),
+    selectedDate: new Date()
+  }
 
   getTodaysDate() {
     var date = new Date()
@@ -24,8 +28,19 @@ class App extends Component {
     return splitStringArray
   }
 
-  daysInMonth(year, month) {
-    var daysInMonth = new Date({props.year}, {props.month}, 1).getDate()
+  dateCard(props) {
+    return (
+      <Card className="Date">
+        <CardContent>
+          <Typography variant="headline" component="h2">
+            {this.props.dateNumber}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">See Events</Button>
+        </CardActions>
+      </Card>
+    )
   }
 
   generateGrid() {

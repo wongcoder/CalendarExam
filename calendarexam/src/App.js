@@ -21,6 +21,19 @@ class App extends Component {
     selectedDate: new Date()
   }
 
+  // Event Handlers
+  previousMonth = () {
+    this.setState({
+      currentMonth: dateFns.subMonths(this.state.currentMonth, 1) // Provides an alternative instead of using minus minus, allowing me to use a date object.
+    })
+  }
+
+  nextMonth = () {
+    this.setState({
+      currentMonth: dateFns.addMonths(this.state.currentMonth, 1) 
+    })
+  }
+
   getTodaysDate() {
     var date = new Date()
     var dateString = date.toLocaleDateString('us-EN')
@@ -28,6 +41,28 @@ class App extends Component {
     return splitStringArray
   }
 
+  renderHeader() {
+    const dateFormat = "MMMM YYYY";
+
+    return (
+      <div className="dateHeader">
+        <Grid container spacing={16}>
+          <Grid item>
+            <Button variant="contained" color="primary">Previous</Button>
+          </Grid>
+          <Grid item>
+            <Typography variant="headline" component="h2">
+              {dateFns.format(this.state.currentMonth, dateFormat)}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" color="primary">Next</Button>
+          </Grid>
+        </Grid>
+      </div>
+
+    )
+  }
   dateCard(props) {
     return (
       <Card className="Date">

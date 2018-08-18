@@ -17,7 +17,7 @@ import Paper from '@material-ui/core/Paper';
 
 class App extends Component {
   state = {
-    currentMonth: new Date(),
+    currentMonth: new Date(), // Date() initializes it to the current date and time, intead of having to manually getTodaysDate().
     selectedDate: new Date()
   }
 
@@ -30,15 +30,8 @@ class App extends Component {
 
   nextMonth = () {
     this.setState({
-      currentMonth: dateFns.addMonths(this.state.currentMonth, 1) 
+      currentMonth: dateFns.addMonths(this.state.currentMonth, 1)
     })
-  }
-
-  getTodaysDate() {
-    var date = new Date()
-    var dateString = date.toLocaleDateString('us-EN')
-    var splitStringArray = str.split("/") // i.e Grab 8, 16, 2018.
-    return splitStringArray
   }
 
   renderHeader() {

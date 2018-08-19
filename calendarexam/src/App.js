@@ -79,7 +79,7 @@ class App extends Component {
 
     return (
       <div className="dateHeader">
-        <Grid container>
+        <Grid container justify="center">
           <Grid item>
             <Button onClick={this.previousMonth}>Previous</Button>
           </Grid>
@@ -97,23 +97,24 @@ class App extends Component {
     )
   }
 
-  renderDayColumns() {
+  renderDayColumns() { // Programmatically rendering instead of writing Sunday, Monday, Tuesday... folliwng tutorial, is optional.
     const dateFormat = "dddd" // Consider putting this as a global variable later on
     const days = []
+    const { classes } = this.props
 
     let startDate = dateFns.startOfWeek(this.state.currentMonth)
 
-    for(var i = 0; i < 7; i++) {
+    for(let i = 0; i < 7; i++) {
       days.push(
-        <Grid item>
-          <div className="col col-center" key={i}>
-            <DateCard dateNumber={dateFns.format(dateFns.addDays(startDate, i), dateFormat)}/>
-          </div>
+        <Grid item key={i}>
+            <Typography>
+              {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
+            </Typography>
         </Grid>
       )
     }
     return (
-      <Grid container>
+      <Grid container justify="center" spacing={32} className={classes.control}>
           {days}
       </Grid>
 
@@ -123,6 +124,22 @@ class App extends Component {
 
 
   generateGrid() { // generates all the little squares we need
+    const { currentMonth, selectedDate } = this.state // Grab state
+
+    // All date manipulation "functions"
+    const monthStart = dateFns.startOfMonth(currentMonth)
+    const monthEnd = dateFns.endOfMonth(monthStart)
+    const startDate = dateFns.startOfWeek(monthStart)
+    const endDate = dateFns.endOfWeek(monthEnd)
+
+    const dateFormat = "D"
+    const rows = []
+
+    let days = []
+    let day = startDate;
+
+    
+
     return (
       <Grid table="table"></Grid>
     )
@@ -134,7 +151,9 @@ class App extends Component {
 
     return (
       <div className="App">
+
         <Grid container className={classes.root} justify="center">
+        <Paper>
           {this.renderHeader()}
           <Grid item xs={12}>
             {this.renderDayColumns()}
@@ -143,7 +162,9 @@ class App extends Component {
           <Grid item>
             <Button onClick={this.resetMonth}>Reset</Button>
           </Grid>
+          </Paper>
         </Grid>
+
       </div>
     )
   }

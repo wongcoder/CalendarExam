@@ -20,8 +20,36 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 
-class App extends Component {
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    paddingTop: theme.spacing.unit * 20,
+  },
+  paper: {
+    height: 140,
+    width: 100,
+  },
+  control: {
+    padding: theme.spacing.unit * 2,
+  },
+});
 
+function DateCard(props) {
+  return (
+    <Card className="date">
+      <CardContent>
+        <Typography variant="headline" component="h2">
+          {props.dateNumber}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">See Events</Button>
+      </CardActions>
+    </Card>
+  );
+}
+
+class App extends Component {
   state = {
     currentMonth: new Date(), // Date() initializes it to the current date and time, intead of having to manually getTodaysDate().
     selectedDate: new Date()
@@ -51,9 +79,9 @@ class App extends Component {
 
     return (
       <div className="dateHeader">
-        <Grid container spacing={16}>
+        <Grid container>
           <Grid item>
-            <Button variant="contained" color="primary" onClick={this.previousMonth}>Previous</Button>
+            <Button onClick={this.previousMonth}>Previous</Button>
           </Grid>
           <Grid item>
             <Typography variant="headline" component="h2">
@@ -61,47 +89,69 @@ class App extends Component {
             </Typography>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" onClick={this.nextMonth}>Next</Button>
+            <Button onClick={this.nextMonth}>Next</Button>
           </Grid>
-          <Grid item>
-            <Button onClick={this.resetMonth}>Reset</Button>
+
         </Grid>
       </div>
     )
   }
 
-  dateCard(props) {
+  renderDayColumns() {
+    const dateFormat = "dddd" // Consider putting this as a global variable later on
+    const days = []
+
+    let startDate = dateFns.startOfWeek(this.state.currentMonth)
+
+    for(var i = 0; i < 7; i++) {
+      days.push(
+        <Grid item>
+          <div className="col col-center" key={i}>
+            <DateCard dateNumber={dateFns.format(dateFns.addDays(startDate, i), dateFormat)}/>
+          </div>
+        </Grid>
+      )
+    }
     return (
-      <Card className="Date">
-        <CardContent>
-          <Typography variant="headline" component="h2">
-            {this.props.dateNumber}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small">See Events</Button>
-        </CardActions>
-      </Card>
+      <Grid container>
+          {days}
+      </Grid>
+
     )
   }
 
+
+
   generateGrid() { // generates all the little squares we need
-    return(
-      <Grid table>
-      </Grid>
+    return (
+      <Grid table="table"></Grid>
     )
   }
 
 
   render() {
+    const { classes } = this.props
+
     return (
       <div className="App">
-        <Grid container className="something">
+        <Grid container className={classes.root} justify="center">
           {this.renderHeader()}
+          <Grid item xs={12}>
+            {this.renderDayColumns()}
+            </Grid>
+
+          <Grid item>
+            <Button onClick={this.resetMonth}>Reset</Button>
+          </Grid>
         </Grid>
       </div>
-    );
+    )
   }
+
 }
 
-export default App;
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(App);

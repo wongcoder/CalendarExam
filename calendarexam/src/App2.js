@@ -49,7 +49,6 @@ class App extends Component {
     selectedDate: new Date(),
     eventItems: [],
     term: '',
-    open: false,
   }
 
   handleEventBeingAdded(eventItems) {
@@ -78,14 +77,13 @@ class App extends Component {
 
   closeModal = () => {
     this.setState({
-      open: false,
+      open: false
     })
   }
 
-  openModal(day) {
+  openModal = () => {
     this.setState({
-      open: true,
-      selectedDate: day,
+      open: true
     })
   }
 
@@ -162,7 +160,7 @@ class App extends Component {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={this.openModal(day)}>Add Events</Button>
+              <Button size="small" onClick={this.openModal}>Add Events</Button>
             </CardActions>
           </Card>
         )
@@ -208,9 +206,7 @@ class App extends Component {
             </Grid>
           </Grid>
           <Modal open={this.state.open} onClose={this.closeModal}>
-            <div>
-              Something {this.selectedDate}
-            </div>
+            Something {this.selectedDate}
           </Modal>
         </Paper>
       </Grid>

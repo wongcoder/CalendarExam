@@ -7,11 +7,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import dateFns from 'date-fns';
 import Typography from '@material-ui/core/Typography';
@@ -20,7 +15,8 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Modal from '@material-ui/core/Modal';
-
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 
 const styles = theme => ({
   root: {
@@ -43,15 +39,25 @@ const styles = theme => ({
 });
 
 
+
 class App extends Component {
-  state = {
-    currentMonth: new Date(), // Date() initializes it to the current date and time, intead of having to manually getTodaysDate().
-    selectedDate: new Date(),
-    eventItems: [],
-    term: '',
-    open: false,
+  constructor(props) {
+    super(props)
+    this.addEvent = this.addEvent.bind(this)
+    this.state = {
+      currentMonth: new Date(), // Date() initializes it to the current date and time, intead of having to manually getTodaysDate().
+      selectedDate: new Date(),
+      eventItems: [],
+      eventDates: [],
+      term: '',
+      openAddEvents: false,
+      openShowEvents: false,
+    }
   }
 
+  addEvent(e) {
+    
+  }
   handleEventBeingAdded(eventItems) {
     this.setState({
       eventItems: [...this.state.items, this.state.term]
@@ -78,14 +84,15 @@ class App extends Component {
 
   closeModal = () => {
     this.setState({
-      open: false,
+      openAddEvents: false,
     })
   }
 
-  openModal(day) {
+  handleClick = dateProvided => {
+    this.openModal
     this.setState({
-      open: true,
-      selectedDate: day,
+      selectedDate: dateProvided,
+      openAddEvents: true,
     })
   }
 
@@ -154,6 +161,8 @@ class App extends Component {
     while(day <= endDate) { // While an X start of the week is LESS than the end of the startOfWeek
       for (let i=0; i < 7; i++) {
         let formattedDate = dateFns.format(day, dateFormat)
+        const dateStorage = day // This would otherwise end up being the start of week every single time
+
         days.push(
           <Card key={i}>
             <CardContent>
@@ -162,7 +171,7 @@ class App extends Component {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={this.openModal(day)}>Add Events</Button>
+              <Button size="small" onClick={() => this.handleClick(dateFns.parse(dateStorage))}>Add Events</Button>
             </CardActions>
           </Card>
         )
@@ -185,7 +194,7 @@ class App extends Component {
 
   render() {
     const { classes } = this.props
-
+    const userSelectedDate = this.state.selectedDate
     return (
       <div className="App">
         <Grid container className={classes.root} justify="center">
@@ -207,9 +216,12 @@ class App extends Component {
               <Button onClick={this.showEvents}>Show Events</Button>
             </Grid>
           </Grid>
-          <Modal open={this.state.open} onClose={this.closeModal}>
+          <Modal open={this.state.openAddEvents} onClose={this.closeModal}>
             <div>
-              Something {this.selectedDate}
+              Something
+              <Typography>
+                {dateFns.format(userSelectedDate)}
+              </Typography>
             </div>
           </Modal>
         </Paper>

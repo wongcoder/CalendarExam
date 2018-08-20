@@ -43,10 +43,24 @@ const styles = theme => ({
 
 class EventObjects extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.createEvents = this.createEvents.bind(this);
+  }
+  // YOU RAISE ME UP (the props) SO I CAN REACH THE CLASSES...
+  delete(key) { // WHO NEEDS TO WRITE PROPER VARIABLE NAMES? NOT ME!
+    this.props.delete(key)
+    console.log("ayy")
+  }
+
   createEvents(item) {
     const dateFormat = 'MM/DD/YYYY'
     return (
-      <ListItem button>
+      <ListItem
+        button
+        onClick={() => this.delete(item.key)}
+      >
         {item.text} due on {dateFns.format(item.key, dateFormat)}
       </ListItem>
     )
@@ -54,7 +68,7 @@ class EventObjects extends Component {
 
   render() {
     var eventArray = this.props.arrayOfEvents
-    var eventMapper = eventArray.map(this.createEvents)
+    var eventMapper = eventArray.map(this.createEvents) // Mapping the current array. Updated each time the state is changed.
 
     return (
       <List>
@@ -68,6 +82,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.addEvent = this.addEvent.bind(this);
+    this.deleteEvent = this.deleteEvent.bind(this)
     this.state = {
       currentMonth: new Date(), // Date() initializes it to the current date and time, intead of having to manually getTodaysDate().
       selectedDate: new Date(),
@@ -94,9 +109,18 @@ class App extends Component {
     }
 
     e.preventDefault(); // Prevent refresh
-    console.log(this.state.eventItems);
-    console.log(this.selectedDate);
-    console.log(this._inputElement.value)
+  }
+
+  deleteEvent(key) {
+    var filteredItems = this.state.eventItems.filter(
+      function (eventItem) { // eventItem is passed in by filter, separating the events manually. callback(element[, index[, array]])
+        return (eventItem.key !== key) // If the eventItem.key is found, we don't return it.
+      }
+    );
+
+    this.setState({
+      eventItems: filteredItems
+    });
   }
 
   handleEventBeingAdded(eventItems) {
@@ -308,8 +332,8 @@ class App extends Component {
                 className={classes.paper}
                 style={{ transform: `translate(170%, 100%)` }}
               >
-                  <Typography> You are in Show Events. </Typography>
-                  <EventObjects arrayOfEvents={this.state.eventItems}/>
+                  <Typography>Click on an event to remove it from the list.</Typography>
+                  <EventObjects arrayOfEvents={this.state.eventItems} delete={this.deleteEvent}/>
               </div>
             </Modal>
           </Paper>

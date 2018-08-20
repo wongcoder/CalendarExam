@@ -123,6 +123,12 @@ class App extends Component {
     });
   }
 
+  resetEvents = () => {
+    this.setState({
+      eventItems: []
+    })
+  }
+
   handleEventBeingAdded(eventItems) {
     this.setState({
       eventItems: [...this.state.items, this.state.term]
@@ -317,7 +323,6 @@ class App extends Component {
                     ref={(a) => this._inputElement = a}
                     placeholder="Please enter an event."
                   />
-                  <Typography>{dateFns.format(userSelectedDate)}</Typography>
                   <Button type="submit">Add Event</Button>
                 </form>
               </div>
@@ -334,6 +339,7 @@ class App extends Component {
               >
                   <Typography>Click on an event to remove it from the list.</Typography>
                   <EventObjects arrayOfEvents={this.state.eventItems} delete={this.deleteEvent}/>
+                  <Button onClick={this.resetEvents}>Reset Events</Button>
               </div>
             </Modal>
           </Paper>
